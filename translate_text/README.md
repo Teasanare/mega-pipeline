@@ -15,6 +15,14 @@ In this container, you will implement the following:
 ### GCP Credentials File
 * Download the `mega-pipeline.json` and save it inside a folder called `secrets` inside `translate_text`
 <a href="https://canvas.harvard.edu/files/23163432/download?download_frd=1" download>mega-pipeline.json</a>
+=======
+|-mega-pipeline<br>
+   &nbsp; &nbsp;   &nbsp; &nbsp;  |-transcribe_audio<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-generate_text<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-synthesis_audio_en<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-translate_text<br>
+    &nbsp; &nbsp;  &nbsp; &nbsp;  |-synthesis_audio<br>
+|-secrets
 
 ### Create pyproject.toml
 * Inside the `translate_text` folder create:
@@ -114,3 +122,8 @@ optional arguments:
 * Login to the Hub: `docker login -u <USER NAME> -p <ACCESS TOKEN>`
 * Tag the Docker Image: `docker tag translate_text <USER NAME>/translate_text`
 * Push to Docker Hub: `docker push <USER NAME>/translate_text`
+=======
+python cli.py --download
+python cli.py --translate
+python cli.py --upload
+```

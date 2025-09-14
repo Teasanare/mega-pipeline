@@ -42,6 +42,14 @@ All components and their step-by-step instructions are listed below so you can f
 By the end, every team will have built a complete pipeline that mirrors a **real-world microservice architecture**: multiple independent services, each containerized, working together to form a larger application.
 
 The overall progress of the mega pipeline can be viewed [here](http://ac215-mega-pipeline.dlops.io/).
+=======
+|-mega-pipeline<br>
+   &nbsp; &nbsp;   &nbsp; &nbsp;  |-transcribe_audio<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-generate_text<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-synthesis_audio_en<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-translate_text<br>
+    &nbsp; &nbsp;  &nbsp; &nbsp;  |-synthesis_audio<br>
+|-secrets
 
 ---
 

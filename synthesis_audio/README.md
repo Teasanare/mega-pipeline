@@ -15,6 +15,14 @@ In this container you will implement the following:
 ### GCP Credentials File
 * Download the `mega-pipeline.json` and save it inside a folder called `secrets` inside `synthesis_audio`
 <a href="https://canvas.harvard.edu/files/23163432/download?download_frd=1" download>mega-pipeline.json</a>
+=======
+|-mega-pipeline<br>
+   &nbsp; &nbsp;   &nbsp; &nbsp;  |-transcribe_audio<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-generate_text<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-synthesis_audio_en<br>
+    &nbsp; &nbsp;   &nbsp; &nbsp; |-translate_text<br>
+    &nbsp; &nbsp;  &nbsp; &nbsp;  |-synthesis_audio<br>
+|-secrets
 
 ### Create pyproject.toml
 * Inside the `synthesis_audio` folder create:
@@ -123,3 +131,7 @@ XI_API_KEY=<API_KEY>
 * Login to the Hub: `docker login -u <USER NAME> -p <ACCESS TOKEN>`
 * Tag the Docker Image: `docker tag synthesis_audio <USER NAME>/synthesis_audio`
 * Push to Docker Hub: `docker push <USER NAME>/synthesis_audio`
+=======
+python cli.py --download
+python cli.py --synthesis
+```
