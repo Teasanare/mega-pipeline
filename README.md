@@ -1,44 +1,48 @@
 # Mega Pipeline App (Tutorial T5B)
 
-🎙️ &rightarrow; 📝 &rightarrow; 🗒️ &rightarrow;  [🔊🇫🇷] &rightarrow; 🔊
+🎙️ → 📝 → 🗒️ → [🔊🇫🇷] → 🔊  
 
-In this tutorial we will build a [Mega Pipeline App](http://ac215-mega-pipeline.dlops.io/). Unlike what we did in T5, this time we will follow a more structured workflow.
+The goal of this tutorial is to build an **AI-assisted podcast generator** that works across multiple languages. Starting from a recorded draft, we’ll transcribe it, enrich it with an LLM, translate it, and synthesize the result back into audio.
 
-*	The Dockerfiles and Pipfiles will be provided; you won’t need to create them.
-*	You can either build the images yourself or run them directly from DockerHub.
-*	Secrets should be stored in a folder outside the app directories, which will not be part of the repository.
-*	A docker-shell.sh script is provided to handle all Docker-related tasks, including building, setting environments, and running containers.
+The key idea is to **simulate a microservice architecture**, where each component runs as its own containerized service. The full pipeline is shown below.
 
- Remember the goal of this pipeline is the following:
+* Pavlos recorded a draft podcast in English, which serves as our starting point.  
+* The audio file is transcribed using the Google Cloud Speech-to-Text API.  
+* The resulting text is sent to an LLM to generate an expanded version of the podcast.  
+* The generated text is synthesized into audio with Google Cloud Text-to-Speech.  
+* The text is also translated into French (or another language) using Google Translation services.  
+* The translated text is synthesized into audio again with Google Cloud Text-to-Speech.  
+* **Bonus step**: The translated text can also be synthesized with ElevenLabs to recreate Pavlos’ voice.  
 
-* Pavlos has recorded audio prompts that will be used as our input data.
-* The audio file is first transcribed using Google Cloud Speech to Text API
-* The text is used as a prompt to an LLM to Generate Text (Full podcast)
-* The generated text is synthesized to audio using Google Cloud Text-to-Speech API
-* The generated text is also translated to French (or any other language) using Google
-* The translated text is then synthesized to audio using Google Cloud Text-to-Speech API
-* BONUS: Use the translated text and synthesize audio using ElevenLabs to output in Palvos' voice
+The pipeline flow is illustrated below:  
+<img src="mega-pipeline-flow.png" width="800">
 
-The pipeline flow is as shown:
-<img src="mega-pipeline-flow.png"  width="800">
+---
 
-## The class will work in groups to perform the following tasks:
-* 📝Task A [transcribe_audio](https://github.com/dlops-io/mega-pipeline/tree/flexible-workflow/transcribe_audio):
-* 🗒️Task B [generate_text](https://github.com/dlops-io/mega-pipeline/tree/flexible-workflow/generate_text):
-* 🔊Task C [synthesis_audio_en](https://github.com/dlops-io/mega-pipeline/tree/flexible-workflow/synthesis_audio_en):
-* 🇮🇳Task D [translate_text](https://github.com/dlops-io/mega-pipeline/tree/flexible-workflow/translate_text):
-* 🔊Task E [synthesis_audio](https://github.com/dlops-io/mega-pipeline/tree/flexible-workflow/synthesis_audio):
+## What You’ll Learn
+By completing this tutorial, you’ll gain experience with:
+- **Containerizing AI/ML workflows** step by step.  
+- **Using shared cloud storage (GCS)** to connect independent services.  
+- **Securing applications** with service account authentication.  
 
-Same teams as in T5 will create a Docker containers to execute all the tasks. Each team will use a unique group-number to track the overall progress.
-The overall progress of this mega pipeline can be viewed [here](http://ac215-mega-pipeline.dlops.io/).
+---
 
+## Group Tasks for the Mega Pipeline
+Students will form teams for this project.
+Each team will build the **entire pipeline end to end**. You won’t just handle one piece—you’ll containerize and connect every component.
 
-## Create a local secrets folder and add the GCP Credentials File:
+All components and their step-by-step instructions are listed below so you can follow along:
 
-It is important to note that we do not want any secure information in Git. So we will manage these files outside of the git folders. At the same level as the app folders create a folder called secrets
+* 📝 Task A — [transcribe_audio](https://github.com/dlops-io/mega-pipeline/tree/main/transcribe_audio)  
+* 🗒️ Task B — [generate_text](https://github.com/dlops-io/mega-pipeline/tree/main/generate_text)  
+* 🔊 Task C — [synthesis_audio_en](https://github.com/dlops-io/mega-pipeline/tree/main/synthesis_audio_en)  
+* 🇫🇷 Task D — [translate_text](https://github.com/dlops-io/mega-pipeline/tree/main/translate_text)  
+* 🔊 Task E — [synthesis_audio](https://github.com/dlops-io/mega-pipeline/tree/main/synthesis_audio)  
 
-Your folder structure should look like this:
+By the end, every team will have built a complete pipeline that mirrors a **real-world microservice architecture**: multiple independent services, each containerized, working together to form a larger application.
 
+The overall progress of the mega pipeline can be viewed [here](http://ac215-mega-pipeline.dlops.io/).
+=======
 |-mega-pipeline<br>
    &nbsp; &nbsp;   &nbsp; &nbsp;  |-transcribe_audio<br>
     &nbsp; &nbsp;   &nbsp; &nbsp; |-generate_text<br>
@@ -47,41 +51,80 @@ Your folder structure should look like this:
     &nbsp; &nbsp;  &nbsp; &nbsp;  |-synthesis_audio<br>
 |-secrets
 
-Download the json file and place inside the secrets folder:
-<a href="https://static.us.edusercontent.com/files/mlca0YEYdvkWPNEowJ0o4hOd" download>mega-pipeline.json</a>
+---
 
+⚠️ **IMPORTANT NOTE**
 
+When building your containers, make sure you **update the group name** inside your configuration.  
+This is how we track your progress and display it correctly on the leaderboard.  
 
+If you don’t change the group name, your work may overwrite someone else’s, or it won’t be visible under your team.  
+So please double-check before you push or run your containerized tasks!
 
-## GCS Bucket Details:
-* **input_audios** - Bucket where we store the input audio files
-* **text_prompts** - Bucket where we store the text prompts that was synthesized by audio to text
-* **text_paragraphs** - Bucket where we store the generated text from GPT2
-* **text_translated** - Bucket where we store the translated text
-* **text_audios** - Bucket where we store the audio of the paragraph of text
-* **output_audios** - Bucket where we store the final French audio files
-* **output_audios_pp** - Bucket where we store the French audio files (Pavlos voice)
+---
+
+## Connecting the Pipeline Components
+In a production pipeline, containerized services talk to each other through APIs, sending requests and responses directly between microservices.
+
+Since we haven’t covered APIs yet, we’ll simplify. Instead of calling one another directly, components will **communicate indirectly by writing their outputs to storage**, which the next stage will then read as input.
+
+In this tutorial, rather than just using your local disk, components will write to and read from a **Google Cloud Storage (GCS) bucket**. This shared bucket acts like a common drive for transcripts, generated text, and synthesized audio.
+
+This setup gives you practical hands-on experience now, while preparing you for the **API-driven systems** we’ll tackle later.
+
+---
+
+### GCS Bucket Details
+In Google Cloud, a **bucket** is like a shared online folder where files can be stored and retrieved. Instead of saving outputs locally, our pipeline components will read and write to this shared bucket so all stages can communicate easily.
+
+* `input_audios/` — raw audio files (starting point).  
+* `text_prompts/` — transcripts generated from speech-to-text.  
+* `text_paragraphs/` — expanded text generated by the LLM.  
+* `text_translated/` — translated versions of the text.  
+* `text_audios/` — synthesized audio clips for each paragraph.  
+* `output_audios/` — final audio outputs in French (or another language).  
+* `output_audios_pp/` — French audio outputs in Pavlos’ voice.  
 
 ![Mega pipeline bucket](mega-pipeline-bucket.png)
 
 
-### Resulting CLI options for each container
+
+## GCP Credentials File:
+
+The last piece we need in order to access the GCP bucket is authentication.
+Buckets won’t let you read or write anything unless you are both authenticated (proving who you are) and authorized (having the right permissions).
+
+In this course, you don’t need to authenticate yourself as a person. Instead, you’ll authenticate your app so it can talk to GCP securely. The way we do this is by using a Service Account—part of IAM in GCP.
+
+To keep it simple, you’ll use a JSON credentials file that represents this Service Account.
+Just download the file and place it inside <app_folder>/secrets/:
+
+<a href="https://canvas.harvard.edu/files/23163432/download?download_frd=1" download>mega-pipeline.json</a>
+
+Later in the course, we’ll revisit authentication in more depth, but for now, this file is all you need to let your containerized apps talk to the GCP bucket.
+
+🔑 Important Note on Secrets
+
+We do not want to put this JSON file in GitHub — it is a secret, after all.
+Make sure the secrets/ folder containing the file is not part of your repo. For this tutorial, we’ve already added a .gitignore entry so the file won’t be pushed accidentally. The canonical (best) way to handle this is to keep your secrets folder outside the repo entirely. That’s what we’ll be moving toward later in the course.
+
+## Running the Pipeline Components
 
 **Transcribe Audio**
-```
+```bash
 python cli.py --download
 python cli.py --transcribe
 python cli.py --upload
 ```
-
-**Generate Text**
+ 
+**Generate Text** 
 ```
 python cli.py --download
 python cli.py --generate
 python cli.py --upload
 ```
 
-**Synthesis Audio English**
+**Synthesize Audio (English)**
 ```
 python cli.py --download
 python cli.py --synthesis
@@ -94,14 +137,106 @@ python cli.py --translate
 python cli.py --upload
 ```
 
-**Synthesis Audio**
+**Synthesize Audio (Trnslated)**
 ```
 python cli.py --download
 python cli.py --synthesis
 ```
 
 
+### Sample Code: Read/Write to GCS Bucket
 
+* Download from bucket
+```
+from google.cloud import storage
+
+# Initiate Storage client
+storage_client = storage.Client(project=gcp_project)
+
+# Get reference to bucket
+bucket = storage_client.bucket(bucket_name)
+
+# Find all content in a bucket
+blobs = bucket.list_blobs(prefix="input_audios/")
+for blob in blobs:
+    print(blob.name)
+    if not blob.name.endswith("/"):
+        blob.download_to_filename(blob.name)
+
+```
+
+* Upload to bucket
+```
+from google.cloud import storage
+
+# Initiate Storage client
+storage_client = storage.Client(project=gcp_project)
+
+# Get reference to bucket
+bucket = storage_client.bucket(bucket_name)
+
+# Destination path in GCS 
+destination_blob_name = "input_audios/test.mp3"
+blob = bucket.blob(destination_blob_name)
+
+blob.upload_from_filename("Path to test.mp3 on local computer")
+
+```
+
+
+
+### Sample Dockerfile
+```
+# Use the official Debian-hosted Python image
+FROM python:3.12-slim-bookworm
+
+ARG DEBIAN_PACKAGES="build-essential curl"
+
+# Prevent apt from showing prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Python wants UTF-8 locale
+ENV LANG=C.UTF-8
+
+# Tell Python to disable buffering so we don't lose any logs.
+ENV PYTHONUNBUFFERED=1
+
+# Tell uv to copy packages from the wheel into the site-packages
+ENV UV_LINK_MODE=copy
+ENV UV_PROJECT_ENVIRONMENT=/home/app/.venv
+
+# This is done for the tutorial only
+ENV GOOGLE_APPLICATION_CREDENTIALS=secrets/mega-pipeline.json
+
+# Ensure we have an up to date baseline, install dependencies and
+# create a user so we don't run the app as root
+RUN set -ex; \
+    for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends $DEBIAN_PACKAGES && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install uv && \
+    useradd -ms /bin/bash app -d /home/app -u 1000 && \
+    mkdir -p /app && \
+    chown app:app /app
+
+# Switch to the new user
+USER app
+WORKDIR /app
+
+# Copy the source code
+COPY --chown=app:app . ./
+
+RUN uv sync
+
+# Entry point
+ENTRYPOINT ["/bin/bash"]
+# Get into the uv virtual environment shell
+CMD ["-c", "source /home/app/.venv/bin/activate && exec bash"]
+```
 
 ### Some notes for running on Windows
 * Docker Win10 installation - needs WSL2 or Hyper-V enabled: https://docs.docker.com/desktop/windows/install/
