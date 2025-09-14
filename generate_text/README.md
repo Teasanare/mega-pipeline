@@ -110,3 +110,4 @@ optional arguments:
 * Login to the Hub: `docker login -u <USER NAME> -p <ACCESS TOKEN>`
 * Tag the Docker Image: `docker tag generate_text <USER NAME>/generate_text`
 * Push to Docker Hub: `docker push <USER NAME>/generate_text`
+
