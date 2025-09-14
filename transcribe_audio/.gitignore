@@ -1,9 +1,7 @@
 # misc
 .DS_Store
 /secrets
-# docker-shell.sh
-# Dockerfile
-# Pipfile
-# Pipfile.lock
+docker-shell.sh
+
 /input_audios
 /text_prompts
