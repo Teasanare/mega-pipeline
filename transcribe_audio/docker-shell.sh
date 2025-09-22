@@ -7,6 +7,7 @@ set -e
 export IMAGE_NAME="mega-pipeline-transcribe-audio"
 export BASE_DIR=$(pwd)
 export SECRETS_DIR=$(pwd)/../../secrets/
+export GOOGLE_APPLICATION_CREDENTIALS=/secrets/mega-pipeline.json
 
 # Default values
 DOCKER_USERNAME="dlops"
@@ -95,5 +96,6 @@ if [ "$BUILD_MODE" == "run" ] || [ "$BUILD_MODE" == "dev-run" ]; then
     docker run --rm --name $IMAGE_NAME -ti \
     -v "$BASE_DIR":/app \
     -v "$SECRETS_DIR":/secrets \
+    -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
     $CONTAINER_IMAGE
 fi

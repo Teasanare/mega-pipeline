@@ -1,6 +1,7 @@
 """
 Module that contains the command line app.
 """
+
 import os
 import io
 import argparse
@@ -14,21 +15,20 @@ parser = argparse.ArgumentParser(description="Command description.")
 
 gcp_project = "ac215-project"
 bucket_name = "mega-pipeline-bucket"
-text_prompts = "text_prompts"  # THIS IS THE TRANSCRIBED TEXT 
-text_paragraphs = "text_paragraphs" # THIS IS THE LLM GENERATED TEXT
-group_name = "" # This needs to be your Group name e.g: group-01, group-02, group-03, group-04, group-05, ...
-assert group_name!="", "Update group name"
-assert group_name!="pavlos-advanced", "Update group name"
+text_prompts = "text_prompts"  # THIS IS THE TRANSCRIBED TEXT
+text_paragraphs = "text_paragraphs"  # THIS IS THE LLM GENERATED TEXT
+group_name = ""  # This needs to be your Group name e.g: group-01, group-02, group-03, group-04, group-05, ...
+assert group_name != "", "Update group name"
+assert group_name != "pavlos-advanced", "Update group name"
 #############################################################################
 #                       Initialize the LLM Client                           #
-client = genai.Client(
-    vertexai=True, project=gcp_project, location='us-central1'
-)
+client = genai.Client(vertexai=True, project=gcp_project, location="us-central1")
 #############################################################################
 
+
 def makedirs():
-    os.makedirs(os.path.join(text_paragraphs,group_name), exist_ok=True)
-    os.makedirs(os.path.join(text_prompts,group_name), exist_ok=True)
+    os.makedirs(os.path.join(text_paragraphs, group_name), exist_ok=True)
+    os.makedirs(os.path.join(text_prompts, group_name), exist_ok=True)
 
 
 def download():
@@ -61,7 +61,6 @@ def generate():
         with open(text_file) as f:
             input_text = f.read()
 
-
         # Generate output
         input_prompt = f"""
             Create a transcript for the podcast about cheese with 1000 or more words.
@@ -71,9 +70,9 @@ def generate():
             The host's name is Pavlos Protopapas.
             {input_text}
         """
-        print(input_prompt,"\n\n\n")
+        print(input_prompt, "\n\n\n")
         response = client.models.generate_content(
-            model='gemini-2.0-flash-001', contents='Why is the sky blue?'
+            model="gemini-2.0-flash-001", contents=input_prompt
         )
         paragraph = response.text
 
@@ -100,7 +99,7 @@ def upload():
         filename = os.path.basename(text_file)
         destination_blob_name = os.path.join(text_paragraphs, group_name, filename)
         blob = bucket.blob(destination_blob_name)
-        print("Uploading:",destination_blob_name, text_file)
+        print("Uploading:", destination_blob_name, text_file)
         blob.upload_from_filename(text_file)
 
 
