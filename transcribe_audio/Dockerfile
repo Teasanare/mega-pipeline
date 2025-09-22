@@ -15,7 +15,6 @@ ENV PYTHONUNBUFFERED=1
 # Tell uv to copy packages from the wheel into the site-packages
 ENV UV_LINK_MODE=copy
 ENV UV_PROJECT_ENVIRONMENT=/home/app/.venv
-ENV GOOGLE_APPLICATION_CREDENTIALS=secrets/mega-pipeline.json
 
 # Ensure we have an up to date baseline, install dependencies and
 # create a user so we don't run the app as root
